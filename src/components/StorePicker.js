@@ -1,9 +1,15 @@
-import React from 'react';
-import { render } from 'react-dom';
+import React, { Fragment } from 'react';
 
 class StorePicker extends React.Component {
   render() {
-    return <p>hello, m8!</p>
+    return (
+      <form className="store-selector">
+        { /* hello me! */ }
+        <h2>Please Enter A Store</h2>
+        <input type = "text" required placeholder="Store Name" />
+        <button type = "submit">Visit Store!</button>
+      </form>
+    );
   }
 }
 
