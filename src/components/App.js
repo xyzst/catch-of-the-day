@@ -15,6 +15,7 @@ class App extends React.Component {
     }
   };
 
+  /* life cycle events */
   addFish = (fish) => {
     // Take copy of existing state, should never modify/mutate state directly
     const fishes = {...this.state.fishes}; // `...` is js obj spread
@@ -33,6 +34,17 @@ class App extends React.Component {
     })
   };
 
+  addToOrder = (key) => {
+    // take a copy of state
+    const order = { ...this.state.order };
+    // either add to the order or update the number in our order
+    order[key] = order[key] + 1 || 1;
+    // call set state to update state obj
+    this.setState({
+      order
+    })
+  };
+
   render() {
     return (
       <div className = "catch-of-the-day">
@@ -42,7 +54,12 @@ class App extends React.Component {
             {
               Object
                 .keys(this.state.fishes)
-                .map(k => <Fish key={k} details={this.state.fishes[k]}/>)
+                .map(k => <Fish
+                  key={k}
+                  index={k}
+                  details={this.state.fishes[k]}
+                  addToOrder={this.addToOrder}
+                />)
             }
           </ul>
         </div>
