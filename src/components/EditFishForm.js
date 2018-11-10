@@ -1,5 +1,4 @@
 import React from 'react';
-import AddFishForm from "./AddFishForm";
 
 class EditFishForm extends React.Component {
   handleChange = (event) => {
@@ -23,6 +22,7 @@ class EditFishForm extends React.Component {
         </select>
         <textarea name="desc" onChange={this.handleChange} value={this.props.fish.desc}/>
         <input type="text" name="image" onChange={this.handleChange} value={this.props.fish.image}/>
+        <button onClick={() => this.props.deleteFish(this.props.index)}>Remove</button>
       </div>
     )
   }

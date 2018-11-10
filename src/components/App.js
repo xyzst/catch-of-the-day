@@ -53,6 +53,24 @@ class App extends React.Component {
     });
   };
 
+  deleteFish = (key) => {
+    const fishes = { ...this.state.fishes };
+
+    fishes[key] = null; // necessary for firebase to delete the item
+
+    this.setState({
+      fishes
+    });
+  };
+
+  removeFromOrder = (key) => {
+    const order = { ...this.state.order };
+
+    delete order[key];
+
+    this.setState({order});
+  };
+
   addFish = (fish) => {
     // Take copy of existing state, should never modify/mutate state directly
     const fishes = {...this.state.fishes}; // `...` is js obj spread
@@ -103,10 +121,12 @@ class App extends React.Component {
         <Order // could use the spread operator here as well (...this.state) but is frowned upon, will always add new objects if state is updated
           fishes = {this.state.fishes}
           order = {this.state.order}
+          removeFromOrder = {this.removeFromOrder}
         />
         <Inventory
           addFish={this.addFish}
           updateFish={this.updateFish}
+          deleteFish={this.deleteFish}
           loadSampleFishes={this.loadSamplesFishes}
           fish = {this.state.fishes}
         />
