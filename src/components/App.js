@@ -4,6 +4,7 @@ import Inventory from './Inventory';
 import Order from './Order';
 import sampleFishes from '../sample-fishes';
 import Fish from './Fish';
+import base from '../base';
 
 class App extends React.Component {
   state = {
@@ -16,6 +17,42 @@ class App extends React.Component {
   };
 
   /* life cycle events */
+  componentDidMount() {
+    const { params } = this.props.match;
+    const localStorageRef = localStorage.getItem(params.storeId);
+    if (localStorageRef) {
+      this.setState({
+        order: JSON.parse(localStorageRef)
+      });
+    }
+    this.ref = base.syncState(`${params.storeId}/fishes`, {
+      context: this,
+      state: 'fishes'
+    });
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem(
+      this.props.match.params.storeId,
+      JSON.stringify(this.state.order)
+    );
+    console.log('Updated successfully!');
+  }
+
+  componentWillUnmount() {
+    base.removeBinding(this.ref);
+  }
+
+  updateFish = (key, updatedFish) => {
+    const fishes = { ...this.state.fishes };
+
+    fishes[key] = updatedFish;
+
+    this.setState({
+      fishes
+    });
+  };
+
   addFish = (fish) => {
     // Take copy of existing state, should never modify/mutate state directly
     const fishes = {...this.state.fishes}; // `...` is js obj spread
@@ -63,10 +100,15 @@ class App extends React.Component {
             }
           </ul>
         </div>
-        <Order/>
+        <Order // could use the spread operator here as well (...this.state) but is frowned upon, will always add new objects if state is updated
+          fishes = {this.state.fishes}
+          order = {this.state.order}
+        />
         <Inventory
           addFish={this.addFish}
+          updateFish={this.updateFish}
           loadSampleFishes={this.loadSamplesFishes}
+          fish = {this.state.fishes}
         />
       </div>
     )
